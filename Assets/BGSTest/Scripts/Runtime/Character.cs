@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BGSTest
 {
@@ -8,12 +10,38 @@ namespace BGSTest
         public Vector2 moveDirection;
 
         private Rigidbody2D rb;
+
+        /// <summary>
+        /// <see cref="CharacterGraphicLayer"/>
+        /// </summary>
+        [SerializeField]
         private Animator[] anims;
+
+        [Header("TESTING")]
+        public CharacterGraphic[] graphics;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            anims = GetComponentsInChildren<Animator>();
+            foreach (var graphic in graphics)
+            {
+                SetGraphic(graphic);
+            }
+        }
+
+        public void ClearGraphic(CharacterGraphicLayer layer)
+        {
+            var anim = anims[(int)layer];
+            anim.runtimeAnimatorController = null;
+            anim.gameObject.SetActive(false);
+        }
+
+        public void SetGraphic(CharacterGraphic graphic)
+        {
+            var anim = anims[(int)graphic.layer];
+            anim.runtimeAnimatorController = graphic.anim;
+            anim.gameObject.SetActive(true);
+            // todo: sync animations here?
         }
 
         private void FixedUpdate()
@@ -26,6 +54,8 @@ namespace BGSTest
             {
                 foreach (var anim in anims)
                 {
+                    if (anim.gameObject.activeInHierarchy == false || anim.runtimeAnimatorController == null)
+                        continue;
                     if (moveDirection.x != 0 || moveDirection.y != 0)
                     {
                         anim.Play(AnimHash.States.walk);
