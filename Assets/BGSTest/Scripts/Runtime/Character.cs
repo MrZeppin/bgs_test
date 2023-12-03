@@ -41,7 +41,16 @@ namespace BGSTest
             var anim = anims[(int)graphic.layer];
             anim.runtimeAnimatorController = graphic.anim;
             anim.gameObject.SetActive(true);
-            // todo: sync animations here?
+            // sync animators
+            var syncSource = anims[(int)CharacterGraphicLayer.Base];
+            var syncSourceStateInfo = syncSource.GetCurrentAnimatorStateInfo(0);
+            anim.Play(syncSourceStateInfo.fullPathHash, 0, syncSourceStateInfo.normalizedTime);
+            for (int i = 0; i < anim.parameterCount; i++)
+            {
+                var param = anim.GetParameter(i);
+                if (param.type == AnimatorControllerParameterType.Float)
+                    anim.SetFloat(param.nameHash, syncSource.GetFloat(param.nameHash));
+            }
         }
 
         private void FixedUpdate()
