@@ -1306,6 +1306,9 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 6d087b093318aac48bfd951362da7628, type: 2}
     stock: 10
     priceOverride: -1
+  - item: {fileID: 11400000, guid: 0f4fd9b99519ad24581f5986585dfa89, type: 2}
+    stock: 3
+    priceOverride: -1
 --- !u!1 &666956901
 GameObject:
   m_ObjectHideFlags: 0
