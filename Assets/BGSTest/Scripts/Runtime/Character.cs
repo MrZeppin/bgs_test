@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,6 +9,10 @@ namespace BGSTest
     {
         public float moveSpeed = 0f;
         public Vector2 moveDirection;
+
+        public int money;
+        public Inventory inventory;
+        public Sprite portrait;
 
         private Rigidbody2D rb;
 
