@@ -9,11 +9,16 @@ namespace BGSTest
 {
     public class ShopUI : MonoBehaviour
     {
+        public static ShopUI Instance { get; private set; }
+
         [SerializeField]
         private RectTransform content;
 
         [SerializeField]
         private ShopSlotUI slotPrefab;
+
+        [SerializeField]
+        private Button closeButton;
 
         [Space]
         [SerializeField]
@@ -24,9 +29,9 @@ namespace BGSTest
 
         private void Awake()
         {
+            Instance = this;
             Debug.Assert(content);
             Debug.Assert(slotPrefab);
-            slotPrefab.gameObject.SetActive(false);
             if (testShopEnabled && testShop)
             {
                 Open(testShop);
@@ -35,10 +40,17 @@ namespace BGSTest
             {
                 gameObject.SetActive(false);
             }
+            closeButton.onClick.AddListener(Close);
         }
 
         public void Open(Shop shop)
         {
+            Debug.Assert(shop);
+            // todo: pooling
+            for (int i = content.childCount - 1; i >= 0; i--)
+            {
+                Destroy(content.GetChild(i).gameObject);
+            }
             foreach (var slot in shop.slots)
             {
                 var slotUI = Instantiate(slotPrefab, content);
@@ -46,11 +58,13 @@ namespace BGSTest
                 slotUI.gameObject.SetActive(true);
             }
             gameObject.SetActive(true);
+            PauseManager.IsPaused = true;
         }
 
         public void Close()
         {
             gameObject.SetActive(false);
+            PauseManager.IsPaused = false;
         }
     }
 }

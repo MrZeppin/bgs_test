@@ -20,6 +20,8 @@ namespace BGSTest
         [Header("TESTING")]
         public CharacterGraphic[] graphics;
 
+        private Vector2 prevMoveDirection;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -55,9 +57,6 @@ namespace BGSTest
 
         private void FixedUpdate()
         {
-            var prevMoveDirection = moveDirection;
-            moveDirection.x = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
-            moveDirection.y = (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0);
             rb.velocity = moveDirection.normalized * moveSpeed;
             if (prevMoveDirection != moveDirection)
             {
@@ -77,6 +76,7 @@ namespace BGSTest
                     }
                 }
             }
+            prevMoveDirection = moveDirection;
         }
 
         private static class AnimHash

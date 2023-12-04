@@ -35,7 +35,9 @@ namespace BGSTest
                     return;
                 slot.stock--;
                 if (slot.item is ItemEquippable equippable)
-                    FindObjectOfType<Character>().SetGraphic(equippable.characterGraphic);
+                {
+                    Player.Instance.character.SetGraphic(equippable.characterGraphic);
+                }
                 UpdateUI();
             });
         }
